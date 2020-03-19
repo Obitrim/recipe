@@ -1,2 +1,2 @@
 # recipe
-Search your recipes and maintain a good health
+Helps you to search for a recipe using a food keyword
