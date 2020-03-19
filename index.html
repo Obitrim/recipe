@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+	<title>Recipe</title>
+	
+	<!--boostrap-->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="./css/app.css" />
+</head>
+<body>
+	<!--app loader-->
+	<div class="text-white d-flex align-items-center justify-content-center" id="loader-wrapper">
+		<div class="app-loader d-flex align-items-center">
+			<div class="spinner"></div>
+			<p class="my-0 ml-2">Loading...</p>
+		</div>
+	</div>
+
+	<header class="bg-danger text-white text-center">
+		<div class="container py-5">
+			<h1>Get Recipes for a good health</h1>
+			<p class="py-3 col-md-10 offset-md-1">Exercising should be about rewarding the body with endorphins and strength. Not about punishing your body for what you’ve eaten
+				<small>-Anonymous</small>
+			</p>
+			<form id="search-form">
+				<input type="search" placeholder="Search recipe by name, ingredient, area, category" class="text-center"/>
+			</form>
+		</div>
+	</header>
+
+	<main class="search-results py-5">
+		<div class="container">
+			<div class="row">
+				<div class="col text-center">
+					<p><span id="results-count">No</span> results found</p>
+				</div>
+			</div>
+			<div class="row" id="results"></div>
+		</div>
+	</main>
+
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js" integrity="sha256-T/f7Sju1ZfNNfBh7skWn0idlCBcI3RwdLSS4/I7NQKQ=" crossorigin="anonymous"></script>
+	<script src="./js/app.js"></script>
+	
+</body>
+</html>
