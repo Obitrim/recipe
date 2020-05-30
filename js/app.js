@@ -3,56 +3,98 @@ const resultContainer = document.getElementById('results');
 const appLoader = document.getElementById('loader-wrapper');
 const resultsCount = document.getElementById('results-count');
 const searchInput = document.querySelector('input[type=search]');
+const recipeBtns = document.querySelectorAll('.btn-read-recipe');
 
 hideLoader();
+let responseHits;
 
-searchForm.addEventListener('submit', evt => {
+recipeBtns.forEach(btn => {
+	btn.addEventListener('click', showRecipeDetails);
+});
+
+searchForm.addEventListener('submit', handleRecipeSearch);
+
+/**
+* Handles recipe search
+* 
+*/
+function handleRecipeSearch(evt){
 	evt.preventDefault();
 	let query = searchInput.value;
 	
 	getData(query)
 		.then(res => res.hits)
 		.then(hits => {
-			
-			let template = '';
-			hits.forEach( item => {
-				let recipe = item.recipe;
-				template += `<div class="col-md-4 col-lg-3">
-				 				<div class="result-item p-3">
-				 				<img src="${ recipe.image }" class="recipe-img w-100" alt="">
-				 				<h4 class="pt-2 text-danger">${ recipe.label }</h4>
-				 				<p>
-				 			`;
-
-				let recipeList = '';
-
-				for(let { text } of recipe.ingredients){
-				 	recipeList += `${text}, `;
-				}
-				if(recipeList.length > 200){
-					template += recipeList.slice(0, 199) +  `... </p> </div></div>`;
-				} else {
-					template += recipeList +`</p> </div></div>`;
-				}
-
-			});
-
-			results.innerHTML = template;
+			responseHits = hits;
 			resultsCount.textContent = hits.length;
+			renderRecipeTemplate();
+
+			document
+				.querySelectorAll('button.btn-read-recipe')
+				.forEach( btn => btn.addEventListener('click', showRecipeDetails));
 
 			hideLoader();
 		})
 		.catch(err => {
 			if(err){
 				results.innerHTML = "";
-				console.log(err);
+				console.error(err);
 				hideLoader();
 			}
 		})
 
 	searchInput.value = "";
-});
+}
 
+/**
+* shows details of a recipe
+*
+* returns {undefined}
+*/
+function showRecipeDetails(evt){
+	let recipe = responseHits[evt.target.dataset.index].recipe;
+	console.log(recipe);
+}
+
+/**
+* Renders a list of recipes template
+* 
+* returns {String} recipe's template
+*/
+function renderRecipeTemplate(){
+
+	function renderRecipeList(recipe){
+		if(!recipe){
+			return '';
+		}
+
+		let recipeList = '';
+		for(let { text } of recipe.ingredients){
+		 	recipeList += `${text}, `;
+		}
+
+		return recipeList.length > 200 
+			? recipeList.slice(0, 199) +  `...`
+			: recipeList;
+	}
+
+	let template = '';
+	responseHits
+		.forEach( (item, index) => {
+			let recipe = item.recipe;
+			template += `<div class="col-md-4 col-lg-3">
+			 				<div class="result-item p-3">
+			 					<img src="${ recipe.image }" class="recipe-img w-100" alt="">
+			 					<h4 class="pt-2 text-danger">${ recipe.label }</h4>
+			 					<p>${renderRecipeList(recipe)}</p>
+			 					<button class="btn btn-danger btn-read-recipe" data-index="${index}">view</button>
+			 				</div>
+			 			</div>
+			 			`;
+		});
+
+	results.innerHTML = template;
+}
 
 /**
 *
