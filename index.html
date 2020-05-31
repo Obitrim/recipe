@@ -27,7 +27,7 @@
 				<small>-Anonymous</small>
 			</p>
 			<form id="search-form">
-				<input type="search" placeholder="Search recipe by name, ingredient, area, category" class="text-center"/>
+				<input type="search" placeholder="Search recipe by name, ingredient, category, meal type" class="text-center"/>
 			</form>
 		</div>
 	</header>
@@ -43,6 +43,36 @@
 		</div>
 	</main>
 
+	<!--recipe details modal-->
+	<div class="modal" id="recipe-details-modal">
+		<div class="modal-dialog">
+			<h2 class="modal-title"></h2>
+			<img class="recipe-img" src="" alt="Recipe image" />
+			<div class="ingredients-wrapper">
+				<h4>Ingredients</h4>
+				<ol class="ingredients"></ol>
+			</div>
+			<div class="health-labels-wrapper">
+				<h4>Health Labels</h4>
+				<ol class="health-labels"></ol>
+			</div>
+			<div class="nutrients-wrapper">
+				<h4>Nutrients</h4>
+				<div class="table-responsive">
+					<table class="nutrients table">
+						<thead>
+							<th>Nutrient</th>
+							<th>Quantity</th>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+			</div>
+			<div class="d-flex justify-content-end mt-2">
+				<button class="btn btn-sm btn-danger btn-close">Close</button>
+			</div>
+		</div>
+	</div>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js" integrity="sha256-T/f7Sju1ZfNNfBh7skWn0idlCBcI3RwdLSS4/I7NQKQ=" crossorigin="anonymous"></script>
 	<script src="./js/app.js"></script>

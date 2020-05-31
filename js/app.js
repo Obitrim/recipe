@@ -5,8 +5,22 @@ const resultsCount = document.getElementById('results-count');
 const searchInput = document.querySelector('input[type=search]');
 const recipeBtns = document.querySelectorAll('.btn-read-recipe');
 
-hideLoader();
+// modal
+const modal = document.querySelector('#recipe-details-modal');
+// const modalDialogue = document.querySelector('.modal-dialog');
+const modalImageElement = document.querySelector('.recipe-img');
+const modalTitleElement = document.querySelector('.modal-title');
+const modalNutrientsTable = document.querySelector('.nutrients.table');
+const modalIngredientsElement = document.querySelector('.ingredients');
+const modalHealthLabelsElement = document.querySelector('.health-labels');
+
+
+showLoader(false);
 let responseHits;
+
+/*================================================
+=            Event handler assignment            =
+================================================*/
 
 recipeBtns.forEach(btn => {
 	btn.addEventListener('click', showRecipeDetails);
@@ -14,14 +28,32 @@ recipeBtns.forEach(btn => {
 
 searchForm.addEventListener('submit', handleRecipeSearch);
 
+modal.addEventListener('click', evt => {
+	evt.stopPropagation();
+	closeModal();
+}, {capture: false});
+
+modal.querySelector('.btn-close')
+	.addEventListener('click', closeModal);
+
+
+/*=====  End of Event handler assignment  ======*/
+
+
+
+/*=================================
+=            functions            =
+=================================*/
 /**
 * Handles recipe search
 * 
 */
 function handleRecipeSearch(evt){
 	evt.preventDefault();
-	let query = searchInput.value;
-	
+	let query = searchInput.value.trim();
+
+	if(query.length < 1) return;
+
 	getData(query)
 		.then(res => res.hits)
 		.then(hits => {
@@ -33,13 +65,13 @@ function handleRecipeSearch(evt){
 				.querySelectorAll('button.btn-read-recipe')
 				.forEach( btn => btn.addEventListener('click', showRecipeDetails));
 
-			hideLoader();
+			showLoader(false);
 		})
 		.catch(err => {
 			if(err){
 				results.innerHTML = "";
 				console.error(err);
-				hideLoader();
+				showLoader(false);
 			}
 		})
 
@@ -53,7 +85,26 @@ function handleRecipeSearch(evt){
 */
 function showRecipeDetails(evt){
 	let recipe = responseHits[evt.target.dataset.index].recipe;
-	console.log(recipe);
+	modalTitleElement.textContent = recipe.label;
+	modalImageElement.src = recipe.image;
+
+	recipe.ingredients.forEach(ingredient => {
+		modalIngredientsElement.innerHTML += `<li class="ingredient">${ ingredient.text }</li>`;
+	});
+
+	recipe.healthLabels.forEach(label => {
+		modalHealthLabelsElement.innerHTML += `<li class="ingredient">${ label }</li>`;
+	});
+
+	for(let {label, quantity, unit} of Object.values(recipe.totalNutrients)){
+		if(quantity > 0){
+			modalNutrientsTable
+				.querySelector('tbody')
+				.innerHTML += `<tr><td>${label}</td><td>${quantity.toFixed(2) + unit}</td></tr>`;
+		}
+	}
+
+	modal.classList.add('show');
 }
 
 /**
@@ -64,18 +115,18 @@ function showRecipeDetails(evt){
 function renderRecipeTemplate(){
 
 	function renderRecipeList(recipe){
-		if(!recipe){
-			return '';
-		}
+		if(!recipe) return;
 
-		let recipeList = '';
+		let ingredientsList = '';
+		const MAX_RECIPE_CHAR_COUNT = 50;
+
 		for(let { text } of recipe.ingredients){
-		 	recipeList += `${text}, `;
+		 	ingredientsList += `${text}, `;
 		}
 
-		return recipeList.length > 200 
-			? recipeList.slice(0, 199) +  `...`
-			: recipeList;
+		return ingredientsList.length > MAX_RECIPE_CHAR_COUNT 
+			? `${ingredientsList.slice(0, MAX_RECIPE_CHAR_COUNT - 1)}...`
+			: ingredientsList;
 	}
 
 	let template = '';
@@ -102,7 +153,7 @@ function renderRecipeTemplate(){
 * if a false argument is passed, it shows loader
 *
 */
-async function getData(query){
+async function getData(query = 'meal'){
 	const BASE_URL = 'https://api.edamam.com/search';
 	const APP_ID = '27405351';
 	const APP_KEY = '8a9c5a0b765495ba5ccf340cb3d98624';
@@ -121,18 +172,18 @@ async function getData(query){
 
 /**
 *
-* Attempts to hide app loader
-*
-*/
-function hideLoader(hide = true){
-	appLoader.classList.add('hide');
-}
-
-/**
-*
 * Attempts to show app loader
 *
 */
-function showLoader(){
-	appLoader.classList.remove('hide');
+function showLoader(show = true){
+	if(show){
+		appLoader.classList.remove('hide');
+	} else {
+		appLoader.classList.add('hide');
+	}
 }
+
+function closeModal(){
+	modal.classList.remove('show');
+}
+/*=====  End of functions  ======*/
