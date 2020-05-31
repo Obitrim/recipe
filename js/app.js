@@ -7,13 +7,11 @@ const recipeBtns = document.querySelectorAll('.btn-read-recipe');
 
 // modal
 const modal = document.querySelector('#recipe-details-modal');
-// const modalDialogue = document.querySelector('.modal-dialog');
 const modalImageElement = document.querySelector('.recipe-img');
 const modalTitleElement = document.querySelector('.modal-title');
 const modalNutrientsTable = document.querySelector('.nutrients.table');
 const modalIngredientsElement = document.querySelector('.ingredients');
 const modalHealthLabelsElement = document.querySelector('.health-labels');
-
 
 showLoader(false);
 let responseHits;
@@ -35,7 +33,6 @@ modal.addEventListener('click', evt => {
 
 modal.querySelector('.btn-close')
 	.addEventListener('click', closeModal);
-
 
 /*=====  End of Event handler assignment  ======*/
 

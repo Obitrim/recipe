@@ -42,10 +42,15 @@ body {
 }
 
 input {
-	width: 60%;
 	padding: 0.7rem 1.5rem !important;
 	border-radius: 2rem;
 	border: none;
+}
+
+@media (min-width: 576px){
+	input {
+		width: 60%;
+	}
 }
 
 /*search results*/
@@ -112,12 +117,6 @@ input {
 	background-color: #fff;
 	padding: 1.4rem;
 }
-
-/*.modal-dialog .btn-close {
-	position: absolute;
-	right: 1rem;
-	top: 1rem;
-}*/
 
 .modal-dialog img {
 	width: 100%;
