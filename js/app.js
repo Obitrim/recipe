@@ -135,7 +135,7 @@ function renderRecipeTemplate(){
 			 					<img src="${ recipe.image }" class="recipe-img w-100" alt="">
 			 					<h4 class="pt-2 text-danger">${ recipe.label }</h4>
 			 					<p>${renderRecipeList(recipe)}</p>
-			 					<button class="btn btn-danger btn-read-recipe" data-index="${index}">view</button>
+			 					<button class="btn btn-danger w-100 btn-read-recipe" data-index="${index}">view</button>
 			 				</div>
 			 			</div>
 			 			`;
